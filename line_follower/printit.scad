@@ -34,4 +34,5 @@ if (step==4) {
 if (step==5) {
     // print it black
     translate([0,0,4]) rotate([180,0,0]) capot_led();
+    entretoises(90,45,25, security=0.2);
 }

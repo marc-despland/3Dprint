@@ -2,7 +2,7 @@ use <servo.scad>
 
 support_width=65;
 support_deep=25;
-screw=4;
+screw=3;
 
 function supportWidth() = support_width;
 function supportDeep() =support_deep;
@@ -24,8 +24,8 @@ module support_servo_bas(chassis_height=10,security=0,mask_security=0,with_screw
             translate([support_width/2-5,5,chassis_height-5]) cylinder(5,d=5+2*mask_security,$fn=16);
             translate([support_width/2-5,support_deep-5,chassis_height-5]) cylinder(5,d=5+2*mask_security,$fn=16);
             if (with_screw) {
-                translate([support_width/2-7.5,support_deep/2,0]) cylinder(50,d=screw+2*mask_security,$fn=16);
-                translate([-support_width/2+7.5,support_deep/2,0]) cylinder(50,d=screw+2*mask_security,$fn=16);
+                translate([support_width/2-7.5,support_deep/2,chassis_height-5-5]) cylinder(40,d=screw+2*mask_security,$fn=16);
+                translate([-support_width/2+7.5,support_deep/2,chassis_height-5-5]) cylinder(40,d=screw+2*mask_security,$fn=16);
             }
         }
         support_servo_haut(security,0.2);

@@ -135,7 +135,7 @@ module chassis() {
         #translate([0,-(chassis_deep/2),0]) support_servo_bas(chassis_height=sensorHeight()+10,security=0.2,mask_security=0,with_screw=true);
         #translate([0,(chassis_deep/2),0]) rotate([0,0,180])  support_servo_bas(chassis_height=sensorHeight()+10,security=0.2,mask_security=0,with_screw=true);
         #rotate([0,0,270]) translate([0,0,sensorHeight()+10]) tracker(security);
-        #translate([10,0,0]) board_screw(90,45,100);
+        #translate([10,0,sensorHeight()+10-chassis_height-5]) board_screw(90,45,50,security=security);
     }
     translate([-chassis_deep/2,0,sensorHeight()+10]) support_cube();
     translate([10,0,sensorHeight()+10]) entretoises(90,45,10,0.2);
@@ -206,7 +206,7 @@ module leds(size=2,top_width=25,security=0,mask=false) {
 }
 
 //!ailette_width(50,2,20,25,30,10);
-!chassis_haut();
+chassis_haut();
 //!support_pile();
 
 //! leds(mask=false);

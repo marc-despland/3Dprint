@@ -28,11 +28,11 @@ module entretoises(width,deep,height, security=0) {
 }
 
 
-module board_screw(width,deep,height) {
-    translate([width/2-2*hole,deep/2-2*hole,0]) cylinder(height,d=hole,$fn=16);
-    translate([width/2-2*hole,-deep/2+2*hole,0]) cylinder(height,d=hole,$fn=16);
-    translate([-width/2+2*hole,deep/2-2*hole,0]) cylinder(height,d=hole,$fn=16);
-    translate([-width/2+2*hole,-deep/2+2*hole,0]) cylinder(height,d=hole,$fn=16);
+module board_screw(width,deep,height, security=0) {
+    translate([width/2-2*hole,deep/2-2*hole,0]) cylinder(height,d=hole+2*security,$fn=16);
+    translate([width/2-2*hole,-deep/2+2*hole,0]) cylinder(height,d=hole+2*security,$fn=16);
+    translate([-width/2+2*hole,deep/2-2*hole,0]) cylinder(height,d=hole+2*security,$fn=16);
+    translate([-width/2+2*hole,-deep/2+2*hole,0]) cylinder(height,d=hole+2*security,$fn=16);
 }
 module esp8266() {
     width=48;
