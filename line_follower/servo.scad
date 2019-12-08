@@ -27,11 +27,11 @@
 function wheelRadius() = wheel_radius;
 
 
-module servo(with_screw=false,with_cable=false,axe_center=true) {        
+module servo(with_screw=false,with_cable=false,with_screw_hole=true,security=0) {        
     //big cylinder
     translate([box_width-box_height/2,0,box_height/2]){
         rotate([90,0,0]){
-            cylinder(cylinder_depth,box_height/2,box_height/2);
+            #cylinder(cylinder_depth,d=box_height+2*security);
         }
     }
     //gear
@@ -43,19 +43,21 @@ module servo(with_screw=false,with_cable=false,axe_center=true) {
     //small cylinder
     translate([box_width-(cylinders_width-small_cylinder),0,box_height/2]){
         rotate([90,0,0]){
-            cylinder(cylinder_depth,small_cylinder/2,small_cylinder/2,$fn=16);
+            cylinder(cylinder_depth,d=small_cylinder+2*security,$fn=16);
         }
     }
     //box
-    cube([box_width,box_depth,box_height]);
+    translate([-security,-security,0]) cube([box_width+2*security,box_depth+2*security,box_height+security]);
     
     //fixation droite
     translate([box_width,fixation_depth_position,0]){
         difference() {
-            cube([fixation_width,fixation_depth,box_height]);
-            translate([fixation_width/2,fixation_depth,box_height/2]){
-                rotate([90,0,0]){
-                    cylinder(fixation_depth,vis_hole,vis_hole,$fn=12);
+            translate([-security,-security,0]) cube([fixation_width+2*security,fixation_depth+2*security,box_height+security]);
+            if (with_screw_hole) {
+                translate([fixation_width/2,fixation_depth,box_height/2]){
+                    rotate([90,0,0]){
+                        cylinder(fixation_depth,d=2*(vis_hole+security),$fn=12);
+                    }
                 }
             }
         }
@@ -70,10 +72,12 @@ module servo(with_screw=false,with_cable=false,axe_center=true) {
     //fixation gauche
     translate([-fixation_width,fixation_depth_position,0]){
         difference() {
-            cube([fixation_width,fixation_depth,box_height]);
-            translate([fixation_width/2,fixation_depth,box_height/2]){
-                rotate([90,0,0]){
-                    cylinder(fixation_depth,vis_hole,vis_hole,$fn=12);
+            translate([-security,-security,0]) cube([fixation_width+2*security,fixation_depth+2*security,box_height+security]);
+            if (with_screw_hole) {
+                translate([fixation_width/2,fixation_depth,box_height/2]){
+                    rotate([90,0,0]){
+                        cylinder(fixation_depth,d=2*(vis_hole+security),$fn=12);
+                    }
                 }
             }
         }
@@ -88,7 +92,7 @@ module servo(with_screw=false,with_cable=false,axe_center=true) {
     if (with_cable) {
         translate([box_width,box_depth-cable_depth,box_height/2]){
             rotate([90,0,90]){
-                cylinder(10,cable_radius,cable_radius,$fn=12);
+                cylinder(40,d=2*(cable_radius+security),$fn=12);
             }
         }
     }
@@ -109,12 +113,14 @@ module wheel() {
 }
 
 
-module servo_wheel(with_screw=false,with_cable=false) {
-    translate([-(box_width-box_height/2), (cylinder_depth+gear_height)-(wheel_depth-wheel_depth_int)/2-wheel_gear,wheel_radius-box_height/2]){
-        servo(with_screw,with_cable);
-    }
+module servo_wheel(with_screw=false,with_cable=false,with_screw_hole=true,security=0) {
+    translate([0,-cylinder_depth,]){
+        translate([-(box_width-box_height/2), (cylinder_depth+gear_height)-(wheel_depth-wheel_depth_int)/2-wheel_gear,wheel_radius-box_height/2]){
+            servo(with_screw,with_cable,with_screw_hole,security=security);
+        }
 
-    wheel();
+        wheel();
+    }
 }
 
-servo_wheel(true,true);
+servo_wheel(true,true,security=0.2);

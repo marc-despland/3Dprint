@@ -11,42 +11,39 @@ sensor_width=5;
 sensor_depth=6.5;
 sensor_height=6.5;
 sensor_distance=16;
-security=0.20;
 
-module tracker_board() {    
+function sensorHeight() = tracker_height + sensor_height;
+
+module tracker_board(security=0) {    
     translate([(tracker_core_width-(tracker_connector_width+tracker_connector_depth))/2,tracker_depth,0]){
         difference() {
-            cube([tracker_connector_width+tracker_connector_depth,tracker_connector_depth,tracker_height]);
+            translate([-security,0,0]) cube([tracker_connector_width+tracker_connector_depth+2*security,tracker_connector_depth+security,tracker_height+security]);
             translate([0,tracker_depth,0]){
-                cylinder(tracker_height,tracker_depth, tracker_depth);
+                cylinder(tracker_height+security,d=2*(tracker_depth-security));
             }
             translate([tracker_connector_width+tracker_connector_depth,tracker_depth,0]){
-                cylinder(tracker_height,tracker_depth, tracker_depth);
+                cylinder(tracker_height+security,d=2*(tracker_depth-security));
             }
-            /*translate([tracker_hole_x,tracker_hole_y,0]){
-                cylinder(tracker_height,tracker_connector_hole, tracker_connector_hole, $fn=16);
-            }
-            translate([tracker_connector_width+tracker_connector_depth-tracker_hole_x,tracker_hole_y,0]){
-                cylinder(tracker_height,tracker_connector_hole, tracker_connector_hole, $fn=16);
-            }*/
         }
     }
-    cube([tracker_core_width,tracker_depth,tracker_height]);
+    translate([-security,-security,0]) cube([tracker_core_width+2*security,tracker_depth+2*security,tracker_height+security]);
     translate([0,tracker_depth/2,0]){
-        cylinder(tracker_height,tracker_depth/2, tracker_depth/2);
+        cylinder(tracker_height+security,d=(tracker_depth+2*security));
     }
     translate([tracker_core_width,tracker_depth/2,0]){
-        cylinder(tracker_height,tracker_depth/2, tracker_depth/2);
+        cylinder(tracker_height+security,d=tracker_depth+2*security);
     }
 }
 
-module sensor() {
-    cube([sensor_width,sensor_depth,sensor_height]);
+module sensor(security=0) {
+    translate([-security, -security, -security]) cube([sensor_width+2*security,sensor_depth+2*security,sensor_height+security]);
 }
 
-module tracker() {
-    translate([tracker_depth/2,0,sensor_height]) tracker_board();
-    for(i=[0:4]) translate([(tracker_depth/2)+sensor_distance*i,(tracker_depth-sensor_depth)/2,]) sensor();
+module tracker(security=0) {
+    translate([-(tracker_width/2), -tracker_depth/2,-tracker_height-sensor_height]) {
+        translate([tracker_depth/2,0,sensor_height]) tracker_board(security);
+        for(i=[0:4]) translate([(tracker_depth/2)+sensor_distance*i,(tracker_depth-sensor_depth)/2,0]) sensor(security);
+    }
 }
 
 
@@ -56,7 +53,7 @@ module mark() {
     }
 }
 
-module tracker_mask() {
+module tracker_mask(security=0) {
     border=2;
     height=12;
     difference() {
@@ -95,4 +92,9 @@ module tracker_mask() {
    
 }
 
-rotate([180,0,0]) tracker_mask();
+//rotate([180,0,0]) tracker_mask();
+
+difference() {
+    tracker(0.2);
+    tracker(0);
+}
