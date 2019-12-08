@@ -11,7 +11,7 @@ step =5;
 
 if (step==1) {
     // print it black
-    translate([0,0,-3.5]) chassis();
+    rotate([0,0,45]) translate([0,0,-3.5]) chassis();
 }
 if (step==2) {
     // print it orange
