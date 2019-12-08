@@ -90,7 +90,8 @@ module support_cube(height=15,with_hole=true) {
         }
         half_cylinder(height,d=diam-(border*2));
         translate([0,-diam/2+border,0]) cube([cube_deep-border,diam-(border*2),height]);
-        if (with_hole) translate([cube_deep-border,0,height/2]) rotate([0,90,0]) #cylinder(border,d=6);
+        //if (with_hole) translate([cube_deep-border,0,height/2]) rotate([0,90,0]) #cylinder(border,d=6);
+        if (with_hole) translate([cube_deep-border,0,height/2]) rotate([0,90,0]) cube([border,10,6],true);
     }
 }
 
